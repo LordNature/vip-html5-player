@@ -1,10 +1,12 @@
 :root {
   --color-primary: #000;
+  --color-primary-text: #FFF;
+  --color-accent-text: #CCC;
 }
 
 header {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-text);
   position: fixed;
   top: 0;
   left: 0;
@@ -20,6 +22,14 @@ header > section {
   display: flex;
   align-items: center;
   gap: 1em;
+}
+
+header > section > a {
+  color: var(--color-accent-text);
+}
+
+footer {
+  text-align: center;
 }
 
 a, button, select {
@@ -42,16 +52,15 @@ main > a {
 
 main > a:active {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-text);
 }
 
 main > a:hover {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 main > a.active {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-text);
 }
-
