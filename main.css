@@ -4,6 +4,19 @@
   --color-accent-text: #CCC;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #424242;
+    --color-primary-text: #F5F5F5;
+    --color-accent-text: #E0E0E0;
+  }
+
+  body {
+    background-color: #212121;
+    color: var(--color-primary-text);
+  }
+}
+
 header {
   background: var(--color-primary);
   color: var(--color-primary-text);
