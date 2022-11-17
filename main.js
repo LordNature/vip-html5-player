@@ -18,7 +18,7 @@ const DEFAULT_PLAYLIST = 'VIP';
 
 // Creates encoded URI for location hash
 function create_trackID(track) {
-  let playlist = document.querySelector('#splaylist').value;
+  let playlist = document.querySelector('select').value;
   let trackID = track.creator + ' - ' + track.title;
   trackID = trackID.replace(/[^a-zA-Z0-9-]/g, '_');
 
@@ -106,19 +106,19 @@ function playTrack (trackid) {
   var track = g_playlist[trackid];
 
   //row.appendChild(newContent);  
-  //var currentDiv = document.querySelector('.playlist'); 
+  //var currentDiv = document.querySelector('main'); 
   //row.setAttribute('id', create_trackID(track));
 
-  if (document.querySelector('.selected'))
-    document.querySelector('.selected').classList.remove('selected');
+  if (document.querySelector('.active'))
+    document.querySelector('.active').classList.remove('active');
 
-  //$('.playlist .selected').removeClass ('selected');
+  //$('main .active').removeClass ('selected');
 
 
-  var trackelem = document.querySelectorAll(".playlist > div")[trackid];
-  trackelem.classList.add('selected');
+  var trackelem = document.querySelectorAll("main > a")[trackid];
+  trackelem.classList.add('active');
 
-  //var trackelem = $('.playlist div').eq (trackid);
+  //var trackelem = $('main div').eq (trackid);
   //trackelem.addClass ('selected');
 
   window.location.hash = create_trackID(track);
@@ -138,10 +138,10 @@ function loadNewPlaylist (playlist, track) {
   var selected_track = track;
 
   localStorage['playlist'] = playlist;
-  document.querySelector('#splaylist').value = playlist;
+  document.querySelector('select').value = playlist;
 
   // Clear
-  document.querySelectorAll(".playlist > div").forEach(e => e.parentNode.removeChild(e));
+  document.querySelectorAll("main > a").forEach(e => e.parentNode.removeChild(e));
 
   g_previous = [];
   g_previous_idx = 0;
@@ -157,14 +157,14 @@ function loadNewPlaylist (playlist, track) {
       var track = g_playlist[i];
 
       // create a new div element 
-      var row = document.createElement('div'); 
+      var row = document.createElement('a'); 
       // and give it some content 
       var newContent = document.createTextNode(track.creator + ' - ' + track.title); 
       // add the text node to the newly created div
       row.appendChild(newContent);  
 
       // add the newly created element and its content into the DOM 
-      var currentDiv = document.querySelector('.playlist'); 
+      var currentDiv = document.querySelector('main'); 
       //document.body.insertBefore(row, currentDiv); 
       currentDiv.appendChild(row);
 
@@ -176,7 +176,7 @@ function loadNewPlaylist (playlist, track) {
       row.text (track.creator + ' - ' + track.title);
       row.attr ('id', create_trackID(track));*/
 
-      //row.appendTo ('.playlist');
+      //row.appendTo ('main');
 
       (function (i) {
         row.addEventListener('click', function (){
@@ -186,7 +186,7 @@ function loadNewPlaylist (playlist, track) {
     }
 
     // Select specified track if possible, or play random track if not.
-    var playlist_tracks = document.querySelectorAll(".playlist > div");
+    var playlist_tracks = document.querySelectorAll("main > a");
     let selection = 0;
 
     for (var i = 0; i < playlist_tracks.length; ++i) {
@@ -202,7 +202,7 @@ function loadNewPlaylist (playlist, track) {
     }
 
 
-    /*var elements = $('.playlist div').filter (function (idx, elem) {
+    /*var elements = $('main div').filter (function (idx, elem) {
       console.log(elem.id);
       return elem.id == selected_track;
     });*/
@@ -222,7 +222,7 @@ function populatePlaylistOptions () {
     option.value = name;
     option.textContent = name;
 
-    document.querySelector('#splaylist').appendChild(option);
+    document.querySelector('select').appendChild(option);
   }
 }
 
@@ -235,12 +235,12 @@ window.onload = function() {
     playNextTrack();
   });
 
-  document.querySelector('.next').addEventListener('click', function (){
+  document.querySelector('button').addEventListener('click', function (){
     playNextTrack(true);
   }); 
 
-  document.querySelector('#splaylist').addEventListener('change', function (){
-    var playlist = document.querySelector('#splaylist').value;
+  document.querySelector('select').addEventListener('change', function (){
+    var playlist = document.querySelector('select').value;
     loadNewPlaylist (playlist, '');
   }); 
 

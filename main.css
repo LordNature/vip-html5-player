@@ -2,51 +2,56 @@
   --color-primary: #000;
 }
 
-.controls {
+header {
+  background: var(--color-primary);
+  color: #fff;
   position: fixed;
-  height: 40px;
-  right: 0;
-  bottom: 0;
-  margin-right: 30%;
-  width: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 2em;
 }
 
-.button {
+header > section {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+a, button, select {
   cursor: pointer;
-  height: 100%;
-  padding: 0 10px;
-  float: left;
-  line-height: 40px;
 }
 
-.playlist {
-  display: table;
-  left: 15;
-  position: absolute;
-  width: 60%;
-  height: 25%;
-  border: 1px solid var(--color-primary);
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  margin: 50px auto;
-  margin-top: 75px;
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  margin-top: 6em;
 }
 
-.playlist div {
+main > a {
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
-  padding: 5px;
-  font-size: 11pt;
-  cursor: pointer;
+  font-size: 1.2em;
+  padding: 0.5em;
 }
 
-.playlist div.selected {
+main > a:active {
   background-color: var(--color-primary);
   color: #fff;
 }
 
-.playlist div:hover {
+main > a:hover {
   background-color: var(--color-primary);
   color: #fff;
 }
+
+main > a.active {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
