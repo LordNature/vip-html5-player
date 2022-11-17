@@ -1,39 +1,18 @@
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-<title>Vidya Intarweb Playlist - HTML5 Player</title>
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
-<script src="main.js"></script>
-<link rel="stylesheet" href="main.css">
-</head>
-<body>
-	<div class='control-bar'>
-		<table class='control-buttons' cellpadding="0" cellspacing="0">
-			<tr>
-				<td id='btn-play' class='control-button'><i class="fa fa-play"></i></td>
-				<td id='btn-previous' class='control-button'><i class="fa fa-step-backward"></i></td>
-				<td id='btn-next' class='control-button'><i class="fa fa-step-forward"></i></td>
-				<td id='btn-loop' class='control-button'><i class="fa fa-repeat"></i></td>
-				<td id='time-current'></td>
-				<td id='time-bar'><div id="scrubber-track"><div id="scrubber-progress"><div id="scrubber"></div></div></div></td>
-				<td id='time-remaining'></td>
-				<td id='btn-volume' class='control-button'><i class="fa fa-volume-up"></i><div id="volume-slider"></div></td>
-				<td class='control-playlist'>
-					<select id='select-playlist'></select>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
-	<audio></audio>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Vidya Intarweb Playlist - HTML5 Player</title>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <section class="controls">
+      <div class="button next">next</div>
+      <audio class="button" controls></audio>
+      <div class="button"><select id="splaylist"></select></div>
+    </section>
 
-	<div id='tracks-table'></div>
-
-	<div class='credits'>
-		<a href="//aersia.net" target="_blank">playlist by Cats777</a>
-	</div>
-</body>
+    <section class="playlist"></section>
+    <script src="main.js"></script>
+  </body>
 </html>
