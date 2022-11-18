@@ -3,8 +3,6 @@ let playlist = undefined;
 const audio = document.querySelector('audio');
 
 let g_playlist = null;
-let g_previous = [];
-let g_previous_idx = 0;
 const MAX_HISTORY = 1;
 
 const PLAYLISTS = {
@@ -115,10 +113,7 @@ function loadNewPlaylist (playlist, track) {
   // Clear
   document.querySelectorAll("main > a").forEach(e => e.parentNode.removeChild(e));
 
-  g_previous = [];
-  g_previous_idx = 0;
   g_playlist = null;
-
 
   load_XML(playlistURL, function(data) {
     // Parse track list
@@ -143,7 +138,7 @@ function loadNewPlaylist (playlist, track) {
 
       (function (i) {
         row.addEventListener('click', function (){
-          playTrack(i);
+          play(i);
         }); 
       }) (i);
     }
