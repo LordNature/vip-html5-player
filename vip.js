@@ -1,4 +1,6 @@
-let playlist = undefined;
+'use strict';
+
+let tracks = [];
 
 const audio = document.querySelector('audio');
 
@@ -50,12 +52,12 @@ function parse_trackID(trackID) {
 }
 
 function parse_XML(data) {
-  result = [];
+  const result = [];
 
-  playlist = data.getElementsByTagName('track');
+  const playlist = data.getElementsByTagName('track');
 
   for (var i = 0; i < playlist.length; ++i) {
-    track = {
+    const track = {
       creator: playlist[i].getElementsByTagName('creator')[0].firstChild.nodeValue,
       title: playlist[i].getElementsByTagName('title')[0].firstChild.nodeValue,
       location: playlist[i].getElementsByTagName('location')[0].firstChild.nodeValue
@@ -83,13 +85,12 @@ function load_XML(playlistURL, callback) {
 }
 
 function skip() {
-  randomID = Math.floor(Math.random() * playlist.length);
+  const randomID = Math.floor(Math.random() * tracks.length);
   play(randomID);
 }
 
 function play(id) {
-  // FIXME: rewrite g_playlist to playlist
-  const track = g_playlist[id];
+  const track = tracks[id];
   // FIXME: create_trackID needs to be updated
   const trackPublicID = create_trackID(track);
 
@@ -127,7 +128,7 @@ function loadNewPlaylist (playlist, track) {
     // Parse track list
     // FIXME: remove when g_playlist is gone
     g_playlist = parse_XML(data);
-    playlist = g_playlist;
+    tracks = g_playlist;
 
     // Build HTML table for track listing
     for (var i = 0; i < g_playlist.length; ++i) {
