@@ -82,7 +82,7 @@ function load_XML(playlistURL, callback) {
   xhttp.send();
 }
 
-function playNextTrack () {
+function skip () {
   if (g_playlist === null)
     return;
 
@@ -173,7 +173,7 @@ function loadNewPlaylist (playlist, track) {
     if (selection != 0) {
       selection.click();
     } else {
-      playNextTrack();
+      skip();
     }
   });
 };
@@ -190,15 +190,15 @@ function populatePlaylistOptions () {
 
 window.onload = function() {
   audio.addEventListener('error', function (){
-    playNextTrack();
+    skip();
   });
 
   audio.addEventListener('ended', function (){
-    playNextTrack();
+    skip();
   });
 
   document.querySelector('button').addEventListener('click', function (){
-    playNextTrack(true);
+    skip();
   }); 
 
   document.querySelector('select').addEventListener('change', function (){
