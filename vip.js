@@ -148,21 +148,7 @@ function loadNewPlaylist (playlist, track) {
 
     writeTracksDOM();
 
-    // Select specified track if possible, or play random track if not.
-    var playlist_tracks = document.querySelectorAll("main > a");
-    let selection = 0;
-
-    for (var i = 0; i < playlist_tracks.length; ++i) {
-      if (playlist_tracks[i].id == selected_track){
-        selection = playlist_tracks[i];
-      }
-    }
-
-    if (selection != 0) {
-      selection.click();
-    } else {
-      skip();
-    }
+    skip();
   });
 };
 
