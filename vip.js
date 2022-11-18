@@ -83,24 +83,32 @@ function load_XML(playlistURL, callback) {
 }
 
 function skip() {
-  playlist = g_playlist; // FIXME: remove
   randomID = Math.floor(Math.random() * playlist.length);
   play(randomID);
 }
 
-function play(trackid) {
-  var track = g_playlist[trackid];
+function play(id) {
+  // FIXME: rewrite g_playlist to playlist
+  const track = g_playlist[id];
+  // FIXME: create_trackID needs to be updated
+  const trackPublicID = create_trackID(track);
 
-  if (document.querySelector('.active'))
-    document.querySelector('.active').classList.remove('active');
+  window.location.hash = trackPublicID;
 
-  var trackelem = document.querySelectorAll("main > a")[trackid];
-  trackelem.classList.add('active');
+  // if exists, remove active class from track
+  const active = document.querySelector('main > a.active');
+  if (active) {
+    active.classList.remove('active');
+  }
 
-  window.location.hash = create_trackID(track);
+  // add active class to track
+  const trackElem = document.getElementById(trackPublicID);
+  trackElem.classList.add('active');
+  trackElem.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+  // play the audio
   audio.setAttribute('src', track.location);
   audio.play();
-  trackelem.scrollIntoView({behavior: "smooth", block: "center"});
 }
 
 function loadNewPlaylist (playlist, track) {
@@ -117,7 +125,9 @@ function loadNewPlaylist (playlist, track) {
 
   load_XML(playlistURL, function(data) {
     // Parse track list
+    // FIXME: remove when g_playlist is gone
     g_playlist = parse_XML(data);
+    playlist = g_playlist;
 
     // Build HTML table for track listing
     for (var i = 0; i < g_playlist.length; ++i) {
