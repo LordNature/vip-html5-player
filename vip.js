@@ -51,9 +51,9 @@ function parse_trackID(trackID) {
 
 function parse_XML(data) {
   result = [];
-  
+
   playlist = data.getElementsByTagName('track');
-  
+
   for (var i = 0; i < playlist.length; ++i) {
     track = {
       creator: playlist[i].getElementsByTagName('creator')[0].firstChild.nodeValue,
@@ -105,32 +105,16 @@ function playNextTrack () {
 function playTrack (trackid) {
   var track = g_playlist[trackid];
 
-  //row.appendChild(newContent);  
-  //var currentDiv = document.querySelector('main'); 
-  //row.setAttribute('id', create_trackID(track));
-
   if (document.querySelector('.active'))
     document.querySelector('.active').classList.remove('active');
-
-  //$('main .active').removeClass ('selected');
-
 
   var trackelem = document.querySelectorAll("main > a")[trackid];
   trackelem.classList.add('active');
 
-  //var trackelem = $('main div').eq (trackid);
-  //trackelem.addClass ('selected');
-
   window.location.hash = create_trackID(track);
   audio.setAttribute('src', track.location);
-  //$('audio').attr ('src', track.location);
-  //$('audio').trigger ('play');
   audio.play();
   trackelem.scrollIntoView({behavior: "smooth", block: "center"});
-
-  /*$('html, body').stop().animate ({
-    scrollTop: trackelem.offset().top - $('header').height()
-  }, 1000);*/
 }
 
 function loadNewPlaylist (playlist, track) {
@@ -165,18 +149,9 @@ function loadNewPlaylist (playlist, track) {
 
       // add the newly created element and its content into the DOM 
       var currentDiv = document.querySelector('main'); 
-      //document.body.insertBefore(row, currentDiv); 
       currentDiv.appendChild(row);
 
-      //row.textContent = track.creator + ' - ' + track.title;
       row.setAttribute('id', create_trackID(track));
-
-      /*
-      var row = $('<div>');
-      row.text (track.creator + ' - ' + track.title);
-      row.attr ('id', create_trackID(track));*/
-
-      //row.appendTo ('main');
 
       (function (i) {
         row.addEventListener('click', function (){
@@ -200,20 +175,7 @@ function loadNewPlaylist (playlist, track) {
     } else {
       playNextTrack();
     }
-
-
-    /*var elements = $('main div').filter (function (idx, elem) {
-      console.log(elem.id);
-      return elem.id == selected_track;
-    });*/
-
-    /*if (elements.length > 0) {
-      elements[0].click ();
-    } else {
-      
-    }*/
   });
-
 };
 
 function populatePlaylistOptions () {
