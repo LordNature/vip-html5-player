@@ -1,3 +1,5 @@
+let playlist = undefined;
+
 const audio = document.querySelector('audio');
 
 let g_playlist = null;
@@ -82,27 +84,13 @@ function load_XML(playlistURL, callback) {
   xhttp.send();
 }
 
-function skip () {
-  if (g_playlist === null)
-    return;
-
-  if (g_previous_idx >= (g_previous.length - 1)) {
-    g_previous.push (Math.floor (Math.random () * g_playlist.length));
-    g_previous_idx = g_previous.length - 1;
-  }
-  else {
-    g_previous_idx += 1;
-  }
-
-  while (g_previous.length > MAX_HISTORY) {
-    g_previous.shift ();
-    g_previous_idx -= 1;
-  }
-
-  playTrack (g_previous[g_previous_idx]);
+function skip() {
+  playlist = g_playlist; // FIXME: remove
+  randomID = Math.floor(Math.random() * playlist.length);
+  play(randomID);
 }
 
-function playTrack (trackid) {
+function play(trackid) {
   var track = g_playlist[trackid];
 
   if (document.querySelector('.active'))
