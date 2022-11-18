@@ -112,6 +112,22 @@ function play(id) {
   audio.play();
 }
 
+function writeTracksDOM() {
+  const main = document.querySelector('main');
+  // create an `a` element for each track
+  for (let i = 0; i < tracks.length; i++) {
+    const t = tracks[i];
+    const a = document.createElement('a');
+    a.innerHTML = t.creator + ' - ' + t.title;
+    // set the track ID so you can refer with hash ID
+    a.setAttribute('id', create_trackID(t));
+    a.addEventListener('click', function() {
+      play(i);
+    });
+    main.appendChild(a);
+  }
+}
+
 function loadNewPlaylist (playlist, track) {
   var playlistURL = PLAYLISTS[playlist];
   var selected_track = track;
@@ -130,29 +146,7 @@ function loadNewPlaylist (playlist, track) {
     g_playlist = parse_XML(data);
     tracks = g_playlist;
 
-    // Build HTML table for track listing
-    for (var i = 0; i < g_playlist.length; ++i) {
-      var track = g_playlist[i];
-
-      // create a new div element 
-      var row = document.createElement('a'); 
-      // and give it some content 
-      var newContent = document.createTextNode(track.creator + ' - ' + track.title); 
-      // add the text node to the newly created div
-      row.appendChild(newContent);  
-
-      // add the newly created element and its content into the DOM 
-      var currentDiv = document.querySelector('main'); 
-      currentDiv.appendChild(row);
-
-      row.setAttribute('id', create_trackID(track));
-
-      (function (i) {
-        row.addEventListener('click', function (){
-          play(i);
-        }); 
-      }) (i);
-    }
+    writeTracksDOM();
 
     // Select specified track if possible, or play random track if not.
     var playlist_tracks = document.querySelectorAll("main > a");
