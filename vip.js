@@ -169,8 +169,13 @@ function play(id) {
 
 
 window.onload = async function() {
-  let playlist = PLAYLIST.VIP;
+  let playlist = localStorage.getItem('playlist');
   writeDOMPlaylistOptions();
+
+  // if playlist not set or not in PLAYLIST, set to default
+  if (!playlist || !(playlist in PLAYLIST)) {
+    playlist = PLAYLIST.VIP;
+  }
 
   // process hash URIs, #VIP:1234
   let trackURI = parseURITrack(window.location.hash.substring(1));
@@ -184,29 +189,18 @@ window.onload = async function() {
     play(trackURI.id);
   }
 
-  audio.addEventListener('error', function (){
-    skip();
-  });
+  // skip on error, end, or skip button
+  audio.addEventListener('error', skip);
+  audio.addEventListener('ended', skip);
+  document.querySelector('button').addEventListener('click', skip);
 
-  audio.addEventListener('ended', function (){
-    skip();
-  });
-
-  document.querySelector('button').addEventListener('click', function (){
-    skip();
+  // allow selection of other playlists
+  document.querySelector('select').addEventListener('change', async function() {
+    const playlist = document.querySelector('select').value;
+    await loadPlaylist(playlist);
   }); 
 
-  document.querySelector('select').addEventListener('change', function (){
-    var playlist = document.querySelector('select').value;
-    loadNewPlaylist (playlist, '');
-  }); 
-
-  /* Load settings */
+  // FIXME: Doesn't do anything
   if (localStorage.getItem ('volume') !== null)
     audio.volume = localStorage.getItem('volume');
-
-  if (localStorage.getItem ('playlist') !== null) {
-    if (localStorage.getItem ('playlist') in PLAYLISTS)
-      playlist = localStorage.getItem ('playlist');
-  }
 };
