@@ -7,14 +7,35 @@ const audio = document.querySelector('audio');
 let g_playlist = null;
 const MAX_HISTORY = 1;
 
-const PLAYLISTS = {
-  'VIP': 'https://vip.aersia.net/roster.xml',
-  'Mellow': 'https://vip.aersia.net/roster-mellow.xml',
-  'Source': 'https://vip.aersia.net/roster-source.xml',
-  'Exiled': 'https://vip.aersia.net/roster-exiled.xml',
-  'WAP': 'https://wap.aersia.net/roster.xml',
-  'CPP': 'https://cpp.aersia.net/roster.xml',
+const PLAYLIST = {
+  VIP: 'https://www.vipvgm.net/roster.min.json',
+  Source: 'https://www.vipvgm.net/roster.min.json',
+  Mellow: 'https://www.vipvgm.net/roster-mellow.min.json',
+  Exiled: 'https://www.vipvgm.net/roster-exiled.min.json',
+  WAP: 'https://wap.aersia.net/roster.xml',
+  CPP: 'https://cpp.aersia.net/roster.xml',
 };
+
+// Takes in an enum from PLAYLIST and returns a roster.
+async function roster(playlist) {
+  // process XML playlists
+  if (playlist == PLAYLIST.WAP || playlist == PLAYLIST.CPP) {
+    console.warn(
+      'vip: legacy XML WAP+CPP playlists are no longer updated'
+    );
+    return await legacyRoster(playlist);
+  }
+
+  let resp = await fetch(playlist);
+  resp = await resp.json();
+
+  // replace file with the actual file path
+  for (let t of resp['tracks']) {
+    t['file'] = resp['url'] + t['file'] + t['ext'];
+  }
+
+  return resp['tracks'];
+}
 
 const DEFAULT_PLAYLIST = 'VIP';
 
@@ -52,7 +73,6 @@ function parse_trackID(trackID) {
 }
 
 async function legacyRoster(playlist) {
-  console.log(playlist);
   let resp = await fetch(playlist);
   resp = await resp.text();
 
