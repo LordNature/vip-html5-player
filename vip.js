@@ -28,6 +28,10 @@ async function roster(playlist) {
 
   // replace file with the actual file path
   for (let t of resp['tracks']) {
+    // if no id, set it to index
+    if (!t.id) {
+      t['id'] = resp['tracks'].indexOf(t);
+    }
     t['file'] = resp['url'] + t['file'] + '.' + resp['ext'];
   }
 
@@ -93,6 +97,7 @@ async function legacyRoster(playlist) {
       'title': title,
       'comp': '',
       'file': loc.replace('http://', 'https://'),
+      'id': json.length,
     };
     json.push(t);
   }
