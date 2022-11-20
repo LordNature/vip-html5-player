@@ -140,9 +140,13 @@ function skip() {
 }
 
 function play(id) {
-  const track = tracks.filter(function(tracks) {
+  let track = tracks.filter(function(tracks) {
     return tracks.id == id;
   })[0];
+  // noop if doesn't exist
+  if (!track) {
+    return;
+  }
 
   const trackURI = writeURITrack(track);
   window.location.hash = trackURI;
