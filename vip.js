@@ -41,7 +41,7 @@ function writeDOMPlaylistOptions() {
   const select = document.querySelector('select');
   for (const p in PLAYLIST) {
     const opt = document.createElement('option');
-    opt.value = p;
+    opt.value = PLAYLIST[p];
     opt.textContent = p;
     select.appendChild(opt);
   }
@@ -178,7 +178,7 @@ function loadNewPlaylist (playlist, track) {
   });
 };
 
-window.onload = function() {
+window.onload = async function() {
   writeDOMPlaylistOptions();
 
   audio.addEventListener('error', function (){
