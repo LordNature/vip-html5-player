@@ -72,30 +72,6 @@ async function loadPlaylist(playlist) {
   //skip();
 }
 
-// Decodes encoded URI
-function parse_trackID(trackID) {
-  let pieces = trackID.split(':');
-  let playlist = null;
-  let track = null;
-
-  if(pieces.length < 2) {
-    playlist = decodeURIComponent(trackID);
-    track = '';
-  } else {
-    pieces.pop();
-    playlist = decodeURIComponent(pieces.join(':'));
-    track = trackID;
-  }
-
-  if(!(playlist in PLAYLISTS))
-    return null;
-
-  return {
-    playlist: playlist,
-    track: track
-  };
-}
-
 async function legacyRoster(playlist) {
   let resp = await fetch(playlist);
   resp = await resp.text();
@@ -128,6 +104,33 @@ function writeURITrack(t) {
   const select = document.querySelector('select');
   const playlist = select.options[select.selectedIndex].text;
   return encodeURIComponent(playlist + ':' + t.id);
+}
+
+function parseURITrack(uri) {
+  // noop if URI is not given
+  if (!uri) {
+    return null;
+  }
+
+  let cleanURI = decodeURIComponent(uri);
+  cleanURI = cleanURI.split(':');
+  // noop if URI is wrong
+  if (cleanURI.length != 2) {
+    return null;
+  }
+
+  const playlist = cleanURI[0];
+  const id = cleanURI[1];
+
+  // noop if playlist doesn't exist
+  if (!(playlist in PLAYLIST)) {
+    return null;
+  }
+
+  return {
+    playlist: playlist,
+    id: id,
+  };
 }
 
 function skip() {
@@ -164,7 +167,18 @@ function play(id) {
 window.onload = async function() {
   let playlist = PLAYLIST.VIP;
   writeDOMPlaylistOptions();
+
+  // process hash URIs, #VIP:1234
+  let trackURI = parseURITrack(window.location.hash.substring(1));
+  if (trackURI) {
+    playlist = PLAYLIST[trackURI.playlist];
+  }
+
+  // load set playlist and play track if given a URI
   loadPlaylist(playlist);
+  if (trackURI) {
+    play(trackURI.id);
+  }
 
   audio.addEventListener('error', function (){
     skip();
@@ -183,8 +197,6 @@ window.onload = async function() {
     loadNewPlaylist (playlist, '');
   }); 
 
-  var track = '';
-
   /* Load settings */
   if (localStorage.getItem ('volume') !== null)
     audio.volume = localStorage.getItem('volume');
@@ -192,13 +204,5 @@ window.onload = async function() {
   if (localStorage.getItem ('playlist') !== null) {
     if (localStorage.getItem ('playlist') in PLAYLISTS)
       playlist = localStorage.getItem ('playlist');
-  }
-
-  // If hash is set, override playlist and track
-  var url_track = parse_trackID (window.location.hash.substring(1));
-
-  if (url_track !== null) {
-    playlist = url_track.playlist;
-    track = url_track.track;
   }
 };
