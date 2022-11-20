@@ -37,6 +37,16 @@ async function roster(playlist) {
   return resp['tracks'];
 }
 
+function writeDOMPlaylistOptions() {
+  const select = document.querySelector('select');
+  for (const p in PLAYLIST) {
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = p;
+    select.appendChild(opt);
+  }
+}
+
 const DEFAULT_PLAYLIST = 'VIP';
 
 // Creates encoded URI for location hash
@@ -168,17 +178,9 @@ function loadNewPlaylist (playlist, track) {
   });
 };
 
-function populatePlaylistOptions () {
-  for (var name in PLAYLISTS) {
-    var option = document.createElement('option'); 
-    option.value = name;
-    option.textContent = name;
-
-    document.querySelector('select').appendChild(option);
-  }
-}
-
 window.onload = function() {
+  writeDOMPlaylistOptions();
+
   audio.addEventListener('error', function (){
     skip();
   });
@@ -196,7 +198,6 @@ window.onload = function() {
     loadNewPlaylist (playlist, '');
   }); 
 
-  populatePlaylistOptions ();
 
   // Default playlist, random track
   var playlist = DEFAULT_PLAYLIST;
