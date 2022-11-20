@@ -76,7 +76,7 @@ async function loadPlaylist(playlist) {
   document.querySelector('main').innerHTML = '';
   tracks = await roster(playlist);
   writeDOMTracks();
-  //skip();
+  skip();
 }
 
 async function legacyRoster(playlist) {
