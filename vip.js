@@ -51,37 +51,33 @@ function parse_trackID(trackID) {
   };
 }
 
-function parse_XML(data) {
-  const result = [];
+async function legacyRoster(playlist) {
+  console.log(playlist);
+  let resp = await fetch(playlist);
+  resp = await resp.text();
 
-  const playlist = data.getElementsByTagName('track');
+  // parse response as XML
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(resp, 'application/xml');
 
-  for (var i = 0; i < playlist.length; ++i) {
-    const track = {
-      creator: playlist[i].getElementsByTagName('creator')[0].firstChild.nodeValue,
-      title: playlist[i].getElementsByTagName('title')[0].firstChild.nodeValue,
-      location: playlist[i].getElementsByTagName('location')[0].firstChild.nodeValue
-    }
-    result.push(track);
+  // convert into JSON
+  const json = [];
+
+  const tracks = xml.querySelectorAll('track');
+  for (let t of tracks) {
+    const creator = t.querySelector('creator').textContent;
+    const title = t.querySelector('title').textContent;
+    const loc = t.querySelector('location').textContent;
+    t = {
+      'game': creator,
+      'title': title,
+      'comp': '',
+      'file': loc,
+    };
+    json.push(t);
   }
 
-  return result;
-}
-
-function load_XML(playlistURL, callback) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", playlistURL, true);
-  xhttp.responseType = "document";
-  xhttp.onreadystatechange = function () {
-    if(this.readyState == xhttp.DONE && this.status == 200) {
-      if(typeof callback === 'function')
-        callback(xhttp.response);
-    }
-  }
-  xhttp.onerror = function() {
-    console.log("Error while getting XML.");
-  }
-  xhttp.send();
+  return json;
 }
 
 function skip() {
