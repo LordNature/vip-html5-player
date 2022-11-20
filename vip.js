@@ -69,6 +69,9 @@ function writeDOMTracks() {
 
 async function loadPlaylist(playlist) {
   localStorage.setItem('playlist', playlist);
+  // set the select option as current playlist
+  const select = document.querySelector('select');
+  select.value = playlist;
   // remove any possible children from main track list
   document.querySelector('main').innerHTML = '';
   tracks = await roster(playlist);
