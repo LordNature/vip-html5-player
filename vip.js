@@ -191,11 +191,23 @@ window.onload = async function() {
     playlist = PLAYLIST[trackURI.playlist];
   }
 
+  // set volume from storage or to default 0.8
+  let volume = localStorage.getItem('volume');
+  if (!volume) {
+    volume = 0.8
+  }
+  audio.volume = volume;
+
   // load set playlist and play track if given a URI
   await loadPlaylist(playlist);
   if (trackURI) {
     play(trackURI.id);
   }
+
+  // set volume in localStorage when audio changes
+  audio.addEventListener('volumechange', (event) => {
+    localStorage.setItem('volume', audio.volume)
+  });
 
   // skip on error, end, or skip button
   audio.addEventListener('error', skip);
@@ -206,9 +218,5 @@ window.onload = async function() {
   document.querySelector('select').addEventListener('change', async function() {
     const playlist = document.querySelector('select').value;
     await loadPlaylist(playlist);
-  }); 
-
-  // FIXME: Doesn't do anything
-  if (localStorage.getItem ('volume') !== null)
-    audio.volume = localStorage.getItem('volume');
+  });
 };
