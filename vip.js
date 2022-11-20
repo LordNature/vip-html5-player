@@ -47,13 +47,34 @@ function writeDOMPlaylistOptions() {
   }
 }
 
+function writeDOMTracks() {
+  const main = document.querySelector('main');
+  // create an `a` element for each track
+  for (const t of tracks) {
+    const a = document.createElement('a');
+    console.log(t);
+    let desc = t.game + ': ' + t.title;
+    if (t.comp) {
+      desc += ', by ' + t.comp;
+    }
+    a.innerHTML = desc
+    // set the track ID so you can refer with hash ID
+    a.setAttribute('id', t.id);
+    a.addEventListener('click', function() {
+      play(t.id);
+    });
+    main.appendChild(a);
+    return;
+  }
+}
+
 async function loadPlaylist(playlist) {
   localStorage.setItem('playlist', playlist);
   // remove any possible children from main track list
   document.querySelector('main').innerHTML = '';
   tracks = await roster(playlist);
   writeDOMTracks();
-  skip();
+  //skip();
 }
 
 const DEFAULT_PLAYLIST = 'VIP';
@@ -143,28 +164,15 @@ function play(id) {
   trackElem.scrollIntoView({behavior: 'smooth', block: 'center'});
 
   // play the audio
-  audio.setAttribute('src', track.location);
+  audio.setAttribute('src', track.file);
   audio.play();
 }
 
-function writeDOMTracks() {
-  const main = document.querySelector('main');
-  // create an `a` element for each track
-  for (let i = 0; i < tracks.length; i++) {
-    const t = tracks[i];
-    const a = document.createElement('a');
-    a.innerHTML = t.creator + ' - ' + t.title;
-    // set the track ID so you can refer with hash ID
-    a.setAttribute('id', create_trackID(t));
-    a.addEventListener('click', function() {
-      play(i);
-    });
-    main.appendChild(a);
-  }
-}
 
 window.onload = async function() {
+  let playlist = PLAYLIST.VIP;
   writeDOMPlaylistOptions();
+  loadPlaylist(playlist);
 
   audio.addEventListener('error', function (){
     skip();
@@ -183,9 +191,6 @@ window.onload = async function() {
     loadNewPlaylist (playlist, '');
   }); 
 
-
-  // Default playlist, random track
-  var playlist = DEFAULT_PLAYLIST;
   var track = '';
 
   /* Load settings */
