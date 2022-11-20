@@ -5,6 +5,14 @@ VIP is a video game OST playlist maintained by Cats777.
 
 fork of [this repository](https://github.com/fpgaminer/vip-html5-player)
 
+## Version 2.0.0
+This version is a rewrite to accommodate the new vipvgm JSON rosters. It also
+heavily refactors the code. The URI schema has change from include the creator
+and title to the new ID schema from vipvgm. Since some playlists lack this ID,
+it is set to the index of the song (which could cause issues in the future). It
+supports the old legacy WAP and CPP playlists as well! Its considered a major
+revision due to the URI schema changing so much.
+
 ## Version 1.0.0
 This version is a rewrite of the original HTML5 replacement player by fpgaminer.
 The rewrite uses native Javascript instead of jQuery and removes the opinionated
