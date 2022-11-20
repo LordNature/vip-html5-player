@@ -92,7 +92,7 @@ async function legacyRoster(playlist) {
       'game': creator,
       'title': title,
       'comp': '',
-      'file': loc,
+      'file': loc.replace('http://', 'https://'),
     };
     json.push(t);
   }
