@@ -47,6 +47,15 @@ function writeDOMPlaylistOptions() {
   }
 }
 
+async function loadPlaylist(playlist) {
+  localStorage.setItem('playlist', playlist);
+  // remove any possible children from main track list
+  document.querySelector('main').innerHTML = '';
+  tracks = await roster(playlist);
+  writeDOMTracks();
+  skip();
+}
+
 const DEFAULT_PLAYLIST = 'VIP';
 
 // Creates encoded URI for location hash
@@ -138,7 +147,7 @@ function play(id) {
   audio.play();
 }
 
-function writeTracksDOM() {
+function writeDOMTracks() {
   const main = document.querySelector('main');
   // create an `a` element for each track
   for (let i = 0; i < tracks.length; i++) {
@@ -153,30 +162,6 @@ function writeTracksDOM() {
     main.appendChild(a);
   }
 }
-
-function loadNewPlaylist (playlist, track) {
-  var playlistURL = PLAYLISTS[playlist];
-  var selected_track = track;
-
-  localStorage['playlist'] = playlist;
-  document.querySelector('select').value = playlist;
-
-  // Clear
-  document.querySelectorAll("main > a").forEach(e => e.parentNode.removeChild(e));
-
-  g_playlist = null;
-
-  load_XML(playlistURL, function(data) {
-    // Parse track list
-    // FIXME: remove when g_playlist is gone
-    g_playlist = parse_XML(data);
-    tracks = g_playlist;
-
-    writeTracksDOM();
-
-    skip();
-  });
-};
 
 window.onload = async function() {
   writeDOMPlaylistOptions();
