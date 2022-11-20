@@ -175,7 +175,7 @@ window.onload = async function() {
   }
 
   // load set playlist and play track if given a URI
-  loadPlaylist(playlist);
+  await loadPlaylist(playlist);
   if (trackURI) {
     play(trackURI.id);
   }
