@@ -4,9 +4,6 @@ let tracks = [];
 
 const audio = document.querySelector('audio');
 
-let g_playlist = null;
-const MAX_HISTORY = 1;
-
 const PLAYLIST = {
   VIP: 'https://www.vipvgm.net/roster.min.json',
   Source: 'https://www.vipvgm.net/roster.min.json',
@@ -31,7 +28,7 @@ async function roster(playlist) {
 
   // replace file with the actual file path
   for (let t of resp['tracks']) {
-    t['file'] = resp['url'] + t['file'] + t['ext'];
+    t['file'] = resp['url'] + t['file'] + '.' + resp['ext'];
   }
 
   return resp['tracks'];
@@ -52,19 +49,17 @@ function writeDOMTracks() {
   // create an `a` element for each track
   for (const t of tracks) {
     const a = document.createElement('a');
-    console.log(t);
     let desc = t.game + ': ' + t.title;
     if (t.comp) {
       desc += ', by ' + t.comp;
     }
     a.innerHTML = desc
     // set the track ID so you can refer with hash ID
-    a.setAttribute('id', t.id);
+    a.setAttribute('id', writeURITrack(t));
     a.addEventListener('click', function() {
       play(t.id);
     });
     main.appendChild(a);
-    return;
   }
 }
 
@@ -75,17 +70,6 @@ async function loadPlaylist(playlist) {
   tracks = await roster(playlist);
   writeDOMTracks();
   //skip();
-}
-
-const DEFAULT_PLAYLIST = 'VIP';
-
-// Creates encoded URI for location hash
-function create_trackID(track) {
-  let playlist = document.querySelector('select').value;
-  let trackID = track.creator + ' - ' + track.title;
-  trackID = trackID.replace(/[^a-zA-Z0-9-]/g, '_');
-
-  return encodeURIComponent(playlist) + ':' + trackID;
 }
 
 // Decodes encoded URI
@@ -140,17 +124,25 @@ async function legacyRoster(playlist) {
   return json;
 }
 
+function writeURITrack(t) {
+  const select = document.querySelector('select');
+  const playlist = select.options[select.selectedIndex].text;
+  return encodeURIComponent(playlist + ':' + t.id);
+}
+
 function skip() {
   const randomID = Math.floor(Math.random() * tracks.length);
-  play(randomID);
+  const trackID = tracks[randomID].id;
+  play(trackID);
 }
 
 function play(id) {
-  const track = tracks[id];
-  // FIXME: create_trackID needs to be updated
-  const trackPublicID = create_trackID(track);
+  const track = tracks.filter(function(tracks) {
+    return tracks.id == id;
+  })[0];
 
-  window.location.hash = trackPublicID;
+  const trackURI = writeURITrack(track);
+  window.location.hash = trackURI;
 
   // if exists, remove active class from track
   const active = document.querySelector('main > a.active');
@@ -159,7 +151,7 @@ function play(id) {
   }
 
   // add active class to track
-  const trackElem = document.getElementById(trackPublicID);
+  const trackElem = document.getElementById(trackURI);
   trackElem.classList.add('active');
   trackElem.scrollIntoView({behavior: 'smooth', block: 'center'});
 
@@ -209,7 +201,4 @@ window.onload = async function() {
     playlist = url_track.playlist;
     track = url_track.track;
   }
-
-  // Load playlist and track
-  loadNewPlaylist (playlist, track);
 };
