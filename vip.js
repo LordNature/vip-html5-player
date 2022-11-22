@@ -180,15 +180,15 @@ window.onload = async function() {
   let playlist = localStorage.getItem('playlist');
   writeDOMPlaylistOptions();
 
-  // if playlist not set or not in PLAYLIST, set to default
-  if (!playlist || !(playlist in PLAYLIST)) {
-    playlist = PLAYLIST.VIP;
-  }
-
   // process hash URIs, #VIP:1234
   let trackURI = parseURITrack(window.location.hash.substring(1));
   if (trackURI) {
     playlist = PLAYLIST[trackURI.playlist];
+  }
+
+  // if playlist not set, set to default
+  if (!playlist) {
+    playlist = PLAYLIST.VIP;
   }
 
   // set volume from storage or to default 0.8
