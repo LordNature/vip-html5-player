@@ -26,13 +26,15 @@ header {
   width: 100%;
   z-index: 1;
   display: flex;
-  justify-content: left;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   align-items: center;
-  gap: 2em;
 }
 
 header > section {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   align-items: center;
   gap: 1em;
 }
